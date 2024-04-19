@@ -11,7 +11,7 @@
         <th>ID</th>
         <th>NAME</th>
         <th>AGE</th>
-
+as
         <tr th:each="user : ${users}">
             <td th:utext="${user.getId()}"></td>
             <td><a th:href="@{/admin/user(id=${user.getId()})}" th:utext="${user.getName()}"></a></td>
