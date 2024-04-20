@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,11 +40,15 @@ public class AdminController {
     @GetMapping("/admin/users")
     public String allUsersPage(Model model) {
         List<User> list = adminService.findAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User person = (User) authentication.getPrincipal();
         model.addAttribute("users", list);
+        model.addAttribute("person", person);
+
         return "pages/index";
     }
 
-    @GetMapping("admin/user")
+    @GetMapping("/admin/user")
     public String show(@RequestParam("id") Long id,
                        Model model) {
         Optional<User> user = adminService.findById(id);
@@ -64,7 +70,11 @@ public class AdminController {
     @GetMapping("/admin/new")
     public String addUserPage(Model model) {
         User user = new User();
-        model.addAttribute("user", user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User person = (User) authentication.getPrincipal();
+
+        model.addAttribute("person", person);
+        model.addAttribute("addUser", user);
         return "pages/newUser";
     }
 

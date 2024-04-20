@@ -1,25 +1,84 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Creating new User</title>
-</head>
-<body>
-    <h1>Создание нового пользователя</h1>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Admin Panel</title>
+    <style>
+        /* Style for the sidebar */
+        .sidebar {
+            margin-top: 57px;
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: white;
+            padding-top: 20px;
+        }
 
-    <form th:method="POST" th:action="@{/admin/users}" th:object="${user}">
-        <label for="name">Имя</label>
-        <input type="text" th:field="*{name}" id="name" required>
-        <br>
-        <label for="age">Возраст</label>
-        <input type="text" th:field="*{age}" id="age" required>
-        <br>
-        <br>
-        <label for="age">Пароль</label>
-        <input type="text" th:field="*{password}" id="password" required>
-        <br>
-        <input type="submit" value="Создать">
-    </form>
-    <a th:href="@{/logout}">Выход</a>
+        /* Links in the sidebar */
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: blue;
+            display: block;
+            transition: 0.3s;
+        }
+
+        /* Style the content */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span style="color: white" th:text="${person.getName()} + ' with roles: '"></span>
+        <span th:each="role : ${person.getRoles()}" style="color: white; margin-right: 5px;" th:text="' ' + ${role.getName().replace('ROLE_', '') + ' '}"></span>
+        <a style="text-decoration: none; color: floralwhite; opacity: 0.7; margin-left: auto;" class="btn btn-link" th:href="@{/logout}">Logout</a>
+    </div>
+</nav>
+
+
+
+<div class="sidebar">
+    <a th:each="role : ${person.getRoles()}"
+       th:text="${role.getName().replace('ROLE_', '')}"
+       th:class="${#strings.equals(role.getName(), 'ROLE_ADMIN')} ?  'btn btn-primary text-white text-start' : ''"
+       th:href="${#strings.equals(role.getName(), 'ROLE_ADMIN')} ? '/admin/users' : '/user?id=' + ${person.getId()}"></a>
+</div>
+
+
+<div style="margin-top: 20px" class="content">
+    <h1>Admin panel</h1>
+    <nav class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="/admin/users" role="tab" aria-controls="nav-home" aria-selected="true">Users Table</a>
+        <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="/admin/new" role="tab" aria-controls="nav-profile" aria-selected="false">New User</a>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="card">
+                <div class="card-header">
+                    <h3>All users</h3>
+                </div>
+                <div class="card-body">
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni, natus sed soluta necessitatibus tempore aspernatur? Praesentium, odit explicabo distinctio dolore adipisci officia iure, ut magnam optio aliquam at similique veritatis.</div>
+        <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium minima repellat incidunt facilis obcaecati blanditiis corrupti ad officia doloribus ullam sapiente ipsum, nemo a, excepturi voluptatem voluptatibus velit eum dignissimos ut, nam tempora? Reiciendis illo itaque veritatis eligendi fuga, mollitia ratione totam veniam esse in.</div>
+    </div>
+</div>
+
+
 </body>
 </html>
