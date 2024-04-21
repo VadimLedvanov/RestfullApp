@@ -58,19 +58,37 @@
 <div style="margin-top: 20px" class="content">
     <h1>Admin panel</h1>
     <nav class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="/admin/users" role="tab" aria-controls="nav-home" aria-selected="true">Users Table</a>
-        <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="/admin/new" role="tab" aria-controls="nav-profile" aria-selected="false">New User</a>
+        <a class="nav-link" id="nav-home-tab" data-bs-toggle="tab" href="/admin/users" role="tab" aria-controls="nav-home" aria-selected="true">Users Table</a>
+        <a class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" href="/admin/new" role="tab" aria-controls="nav-profile" aria-selected="false">New User</a>
     </nav>
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="card">
                 <div class="card-header">
-                    <h3>All users</h3>
+                    <h3>Add new user</h3>
                 </div>
                 <div class="card-body">
-                    <div>
-
+                    <div class="container" style="text-align: center">
+                        <form th:method="POST" th:action="@{/admin/users}" th:object="${addUser}">
+                            <label for="name" class="form-label" style="display: block; text-align: center;"><strong>Name</strong></label>
+                            <input type="text" class="form-control" style="width: 300px; margin: 0 auto" th:field="*{name}" id="name" required>
+                            <br>
+                            <label for="age" class="form-label" style="display: block; text-align: center;"><strong>Age</strong></label>
+                            <input type="text" class="form-control" style="width: 300px; margin: 0 auto" th:field="*{age}" id="age" required>
+                            <br>
+                            <label for="password" class="form-label" style="display: block; text-align: center;"><strong>Password</strong></label>
+                            <input type="password" class="form-control" style="width: 300px; margin: 0 auto" th:field="*{password}" id="password" required>
+                            <br>
+                            <label class="form-label" style="display: block; text-align: center;"><strong>Role</strong></label>
+                            <select name="selectedRoles" class="form-select" style="width: 300px; margin: 0 auto" aria-label="Default select" size="2">
+                                <option value="1">ADMIN</option>
+                                <option value="2">USER</option>
+                            </select>
+                            <br>
+                            <input type="submit" class="btn btn-success" value="Add new user">
+                        </form>
                     </div>
+
                 </div>
             </div>
         </div>

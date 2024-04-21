@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Редактирование пользователя</h1>
-    <form th:method="POST" th:action="@{/admin/user/edit}" th:object="${user}">
+    <form th:method="POST" th:action="@{/admin/user/edit}" th:object="${editUser}">
         <input type="hidden" name="id" th:value="${user.getId()}">
         <label for="name">Имя</label>
         <input type="text" th:field="*{name}" id="name" required>
@@ -15,7 +15,7 @@
         <input type="text" th:field="*{age}" id="age" required>
         <br>
         <lable for="password">Пароль</lable>
-        <input type="text" name="password" th:value="${user.getPassword()}">
+        <input type="text" name="password" th:value="${editUser.getPassword()}">
         <br>
         <label>Роли:</label>
 

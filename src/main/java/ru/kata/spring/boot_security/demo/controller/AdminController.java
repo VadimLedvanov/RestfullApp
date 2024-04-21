@@ -5,21 +5,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ru.kata.spring.boot_security.demo.model.Role;
+
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.AdminService;
-import ru.kata.spring.boot_security.demo.service.AdminServiceImpl;
 
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 
 @Controller
@@ -44,6 +44,7 @@ public class AdminController {
         User person = (User) authentication.getPrincipal();
         model.addAttribute("users", list);
         model.addAttribute("person", person);
+        model.addAttribute("editUser", new User());
 
         return "pages/index";
     }
@@ -61,7 +62,7 @@ public class AdminController {
         return "pages/show";
     }
 
-    @PostMapping("/admin/user")
+    @DeleteMapping("/admin/user")
     public String deleteUser(@RequestParam("id") Long id) {
         adminService.deleteById(id);
         return "redirect:/admin/users";
@@ -75,16 +76,19 @@ public class AdminController {
 
         model.addAttribute("person", person);
         model.addAttribute("addUser", user);
+
         return "pages/newUser";
     }
 
     @PostMapping("/admin/users")
-    public String create(@ModelAttribute("user") User user) {
-        adminService.save(user);
+    public String create(@ModelAttribute("user") User user,
+                         @RequestParam(value = "selectedRoles", required = false)
+                         List<Long> selectedRoleId) {
+        adminService.save(user, selectedRoleId);
         return "redirect:/admin/users";
     }
 
-    @GetMapping("/admin/user/edit")
+    @GetMapping("/admin/users/edit")
     public String editUser(@RequestParam("id") Long id,
                            Model model) {
         Optional<User> user = adminService.findById(id);
@@ -93,12 +97,12 @@ public class AdminController {
             return "pages/noUser";
         }
 
-        model.addAttribute("user", user.get());
+        model.addAttribute("editUser", user.get());
         return "pages/edit";
     }
 
-    @PostMapping("/admin/user/edit")
-    public String update(@ModelAttribute("user") User user,
+    @PatchMapping("/admin/user/edit")
+    public String update(@ModelAttribute("editUser") User user,
                          @RequestParam(value = "selectedRoles", required = false)
                          List<Long> selectedRoleId) {
         adminService.update(user, selectedRoleId);
