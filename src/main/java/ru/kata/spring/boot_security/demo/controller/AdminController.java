@@ -1,20 +1,29 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.AdminService;
+import ru.kata.spring.boot_security.demo.util.UserIncorrectData;
+import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 
 import java.util.List;
@@ -22,7 +31,7 @@ import java.util.Optional;
 
 
 
-@Controller
+@RestController
 public class AdminController {
 
     private final AdminService adminService;
@@ -38,28 +47,19 @@ public class AdminController {
     }
 
     @GetMapping("/admin/users")
-    public String allUsersPage(Model model) {
-        List<User> list = adminService.findAll();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User person = (User) authentication.getPrincipal();
-        model.addAttribute("users", list);
-        model.addAttribute("person", person);
-        model.addAttribute("editUser", new User());
-
-        return "pages/index";
+    public List<User> allUsersPage(Model model) {
+        return adminService.findAll();
     }
 
-    @GetMapping("/admin/user")
-    public String show(@RequestParam("id") Long id,
-                       Model model) {
+    @GetMapping("/admin/user/{id}")
+    public User show(@PathVariable("id") Long id) {
         Optional<User> user = adminService.findById(id);
 
         if (user.isEmpty()) {
-            return "pages/noUser";
+            throw new UserNotFoundException("There is no user with ID = " + id);
         }
 
-        model.addAttribute("user", user.get());
-        return "pages/show";
+        return user.get();
     }
 
     @DeleteMapping("/admin/user")
@@ -84,31 +84,31 @@ public class AdminController {
     }
 
     @PostMapping("/admin/users")
-    public String create(@ModelAttribute("user") User user,
-                         @RequestParam(value = "selectedRoles", required = false)
-                         List<Long> selectedRoleId) {
+    public String create(@RequestParam(value = "selectedRoles", required = false)
+                         List<Long> selectedRoleId,
+                         @RequestBody User user) {
         adminService.save(user, selectedRoleId);
         return "redirect:/admin/users";
     }
 
-    @GetMapping("/admin/users/edit")
-    public String editUser(@RequestParam("id") Long id,
-                           Model model) {
-        Optional<User> user = adminService.findById(id);
+//    @GetMapping("/admin/users/edit")
+//    public String editUser(@RequestParam("id") Long id,
+//                           Model model) {
+//        Optional<User> user = adminService.findById(id);
+//
+//        if (user.isEmpty()) {
+//            return "pages/noUser";
+//        }
+//
+//        model.addAttribute("editUser", user.get());
+//        return "pages/edit";
+//    }
 
-        if (user.isEmpty()) {
-            return "pages/noUser";
-        }
-
-        model.addAttribute("editUser", user.get());
-        return "pages/edit";
+    @PutMapping("/admin/users")
+    public User update(@RequestBody User user) {
+        adminService.update(user, List.of());
+        return user;
     }
 
-    @PatchMapping("/admin/user/edit")
-    public String update(@ModelAttribute("editUser") User user,
-                         @RequestParam(value = "selectedRoles", required = false)
-                         List<Long> selectedRoleId) {
-        adminService.update(user, selectedRoleId);
-        return "redirect:/admin/users";
-    }
+
 }
