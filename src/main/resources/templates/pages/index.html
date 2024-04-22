@@ -45,10 +45,8 @@
     </nav>
 
     <div class="sidebar">
-        <a th:each="role : ${person.getRoles()}"
-           th:text="${role.getName().replace('ROLE_', '')}"
-           th:class="${#strings.equals(role.getName(), 'ROLE_ADMIN')} ?  'btn btn-primary text-white text-start' : ''"
-           th:href="${#strings.equals(role.getName(), 'ROLE_ADMIN')} ? '/admin/users' : '/user?id=' + ${person.getId()}"></a>
+        <a href="/admin/users" class="btn btn-primary text-white text-start">Admin</a>
+        <a th:href="@{/user/(id=${person.getId()})}" class="btn text-start">User</a>
     </div>
 
     <div style="margin-top: 20px" class="content">

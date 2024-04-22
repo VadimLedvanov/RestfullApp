@@ -74,6 +74,9 @@ public class AdminController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User person = (User) authentication.getPrincipal();
 
+        boolean isAdmin = person.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+
+        model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("person", person);
         model.addAttribute("addUser", user);
 

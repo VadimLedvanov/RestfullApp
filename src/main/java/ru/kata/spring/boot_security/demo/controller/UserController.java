@@ -32,6 +32,8 @@ public class UserController {
             return "pages/noUser";
         }
 
+        boolean isAdmin = user.get().getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("user", user.get());
         return "pages/userPage";
     }

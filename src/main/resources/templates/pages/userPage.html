@@ -48,10 +48,8 @@
 
 
 <div class="sidebar">
-    <a th:each="role : ${user.getRoles()}"
-       th:text="${role.getName().replace('ROLE_', '')}"
-       th:class="${#strings.equals(role.getName(), 'ROLE_USER')} ?  'btn btn-primary text-white text-start' : ''"
-       th:href="${#strings.equals(role.getName(), 'ROLE_ADMIN')} ? '/admin/users' : '/user?id=' + ${user.getId()}"></a>
+    <a th:if="${isAdmin}" href="/admin/users" class="btn text-start">Admin</a>
+    <a th:href="@{/user/(id=${user.getId()})}" class="btn btn-primary text-white text-start">User</a>
 </div>
 
 
