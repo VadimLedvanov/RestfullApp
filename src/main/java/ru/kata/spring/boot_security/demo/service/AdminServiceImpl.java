@@ -19,14 +19,12 @@ import java.util.Set;
 public class AdminServiceImpl implements AdminService{
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
     public AdminServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -46,39 +44,10 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Transactional
-    public void save(User user, List<Long> selectedRoleId) {
-        if (selectedRoleId == null) {
-            selectedRoleId = new ArrayList<>();
-        }
-
-        Set<Role> selectedRoles = new HashSet<>();
-        for (Long roleId : selectedRoleId) {
-            Role role = roleRepository.findById(roleId).get();
-            selectedRoles.add(role);
-        }
-
-        user.setRole(selectedRoles);
+    public void save(User user) {
         user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
     }
-
-    @Transactional
-    public void update(User user, List<Long> selectedRoleId) {
-        if (selectedRoleId == null) {
-            selectedRoleId = new ArrayList<>();
-        }
-
-        Set<Role> selectedRoles = new HashSet<>();
-        for (Long roleId : selectedRoleId) {
-            Role role = roleRepository.findById(roleId).get();
-            selectedRoles.add(role);
-        }
-
-        user.setRole(selectedRoles);
-        user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(user.getPassword()));
-        userRepository.save(user);
-    }
-
 
     @Transactional(readOnly = true)
     public User findByUsername(String username) {

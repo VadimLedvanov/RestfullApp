@@ -16,10 +16,8 @@ public interface AdminService {
     void deleteById(Long id);
 
 
-    void save(User user, List<Long> selectedRoles);
+    void save(User user);
 
-
-    void update(User user, List<Long> selectedRoleId);
 
 
     User findByUsername(String username);

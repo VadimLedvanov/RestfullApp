@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +17,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 import org.springframework.web.bind.annotation.RestController;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.AdminService;
-import ru.kata.spring.boot_security.demo.util.UserIncorrectData;
-import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
-
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -47,68 +47,51 @@ public class AdminController {
     }
 
     @GetMapping("/admin/users")
-    public List<User> allUsersPage(Model model) {
-        return adminService.findAll();
+    public List<UserDTO> allUsersPage() {
+        return adminService.findAll().stream().map(this::convertToUserDTO)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/admin/user/{id}")
-    public User show(@PathVariable("id") Long id) {
-        Optional<User> user = adminService.findById(id);
-
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("There is no user with ID = " + id);
-        }
-
-        return user.get();
+    @GetMapping("/admin/users/{id}")
+    public UserDTO show(@PathVariable("id") Long id) {
+        return convertToUserDTO(adminService.findById(id).orElse(null));
     }
 
-    @DeleteMapping("/admin/user")
-    public String deleteUser(@RequestParam("id") Long id) {
+    @DeleteMapping("/admin/users/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         adminService.deleteById(id);
-        return "redirect:/admin/users";
-    }
-
-    @GetMapping("/admin/new")
-    public String addUserPage(Model model) {
-        User user = new User();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User person = (User) authentication.getPrincipal();
-
-        boolean isAdmin = person.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
-
-        model.addAttribute("isAdmin", isAdmin);
-        model.addAttribute("person", person);
-        model.addAttribute("addUser", user);
-
-        return "pages/newUser";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/admin/users")
-    public String create(@RequestParam(value = "selectedRoles", required = false)
-                         List<Long> selectedRoleId,
-                         @RequestBody User user) {
-        adminService.save(user, selectedRoleId);
-        return "redirect:/admin/users";
+    public ResponseEntity<HttpStatus> create(@RequestBody UserDTO userDTO) {
+        adminService.save(convertToUser(userDTO));
+        return ResponseEntity.ok(HttpStatus.OK);
     }
-
-//    @GetMapping("/admin/users/edit")
-//    public String editUser(@RequestParam("id") Long id,
-//                           Model model) {
-//        Optional<User> user = adminService.findById(id);
-//
-//        if (user.isEmpty()) {
-//            return "pages/noUser";
-//        }
-//
-//        model.addAttribute("editUser", user.get());
-//        return "pages/edit";
-//    }
 
     @PutMapping("/admin/users")
-    public User update(@RequestBody User user) {
-        adminService.update(user, List.of());
-        return user;
+    public ResponseEntity<HttpStatus> update(@RequestBody UserDTO userDTO) {
+        adminService.save(convertToUser(userDTO));
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    private UserDTO convertToUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setAge(user.getAge());
+        userDTO.setRoles(user.getRoles());
+        return userDTO;
+    }
 
+    private User convertToUser(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setName(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setAge(userDTO.getAge());
+        user.setRole(userDTO.getRoles());
+        return user;
+    }
 }
