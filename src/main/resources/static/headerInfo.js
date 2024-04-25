@@ -9,7 +9,7 @@ function fillHeader() {
             let roles = ''
             output += `
                 <span style = "color: white">${data.username}</span>
-                <span style="color: white" class="text-start">with roles: </span>
+                <span style="color: white" class="t">with roles: </span>
             `
             output += `<span style="color: white">`
             data.roles.forEach(role => {
