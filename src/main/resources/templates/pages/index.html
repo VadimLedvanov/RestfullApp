@@ -36,13 +36,9 @@
 </head>
 <body class="bg-light">
 
-<!--    <nav class="navbar navbar-dark bg-dark">-->
-<!--        <div class="container-fluid">-->
-<!--            <span style="color: white" th:text="${person.getName()} + ' with roles: '"></span>-->
-<!--            <span th:each="role : ${person.getRoles()}" style="color: white; margin-right: 5px;" th:text="' ' + ${role.getName().replace('ROLE_', '') + ' '}"></span>-->
-<!--            <a style="text-decoration: none; color: floralwhite; opacity: 0.7; margin-left: auto;" class="btn btn-link" th:href="@{/logout}">Logout</a>-->
-<!--        </div>-->
-<!--    </nav>-->
+    <nav id="navbar-toggle-button" class="navbar navbar-dark bg-dark">
+        <!-- js code -->
+    </nav>
 
 <!--    <div class="sidebar">-->
 <!--        <a href="/admin/users" class="btn btn-primary text-white text-start">Admin</a>-->
@@ -94,6 +90,7 @@
             crossorigin="anonymous"></script>
 
     <script src="/allUsers.js"></script>
+    <script src="/headerInfo.js"></script>
 
 
 </body>

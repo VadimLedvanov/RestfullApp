@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
+@RequestMapping("/api")
 public class AdminController {
 
     private final AdminService adminService;
@@ -41,38 +42,40 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/admin")
-    public String adminPage() {
-        return "pages/admin";
-    }
-
-    @GetMapping("/admin/users")
+    @GetMapping("/users")
     public List<UserDTO> allUsersPage() {
         return adminService.findAll().stream().map(this::convertToUserDTO)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/admin/users/{id}")
+    @GetMapping("/users/{id}")
     public UserDTO show(@PathVariable("id") Long id) {
         return convertToUserDTO(adminService.findById(id).orElse(null));
     }
 
-    @DeleteMapping("/admin/users/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         adminService.deleteById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PostMapping("/admin/users")
+    @PostMapping("/users")
     public ResponseEntity<HttpStatus> create(@RequestBody UserDTO userDTO) {
         adminService.save(convertToUser(userDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping("/admin/users")
+    @PutMapping("/users")
     public ResponseEntity<HttpStatus> update(@RequestBody UserDTO userDTO) {
         adminService.save(convertToUser(userDTO));
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/authUser")
+    public UserDTO getAuthUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        return convertToUserDTO(user);
     }
 
     private UserDTO convertToUserDTO(User user) {

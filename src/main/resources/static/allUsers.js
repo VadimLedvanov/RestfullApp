@@ -1,29 +1,31 @@
-const url = "http://localhost:8080/admin/users"
-let tbody = document.getElementById("user-table");
-let output = ''
+function fillTable() {
+    const url = "http://localhost:8080/api/users"
+    let tbody = document.getElementById("user-table");
+    let output = ''
 
-// Заполнение таблицы пользователей
-fetch(url)
-    .then(res => res.json())
-    .then(data => {
-        data.forEach(user => {
-            let roles = ''
-            output += `
-            <tr>
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.age}</td>
-                <td>${user.password}</td>
-            `
-            user.roles.forEach(role => {
-                roles += role.name.replace("ROLE_", '') + ' ';
-            })
+    // Заполнение таблицы пользователей
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(user => {
+                let roles = ''
 
-            output += `
+                output += `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.age}</td>
+                `
+
+                user.roles.forEach(role => {
+                    roles += role.name.replace("ROLE_", '') + ' ';
+                })
+
+                output += `
                 <td colspan="2">${roles}</td>
             `
-            // edit form
-            output += `
+                // edit form
+                output += `
                 
                 <td>
                     <button type="button" style="color: white" class="btn btn-info" data-bs-toggle="modal" data-bs-target="${'#Modal_Edit_' + user.id}">
@@ -41,13 +43,13 @@ fetch(url)
                                 <div class="modal-body">
                                     <form id="formEdit_${user.id}">
                                         <label for="edit-id" class="form-label" style="display: block; text-align: center;"><strong>ID</strong></label>
-                                        <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.get}" name="id" id="edit-id${user.id}" readonly>
+                                        <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.id}" name="id" id="edit-id${user.id}" readonly>
                                         <br>
                                         <label for="edit-name" class="form-label" style="display: block; text-align: center;"><strong>Name</strong></label>
                                         <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.username}" name="name" id="edit-name${user.username}" required>
                                         <br>
                                         <label for="edit-age" class="form-label" style="display: block; text-align: center;"><strong>Age</strong></label>
-                                        <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.age}" name="age" id="edit-age${user.age}" required>
+                                        <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.age}" name="age" id="edit-age${user.id}" required>
                                         <br>
                                         <label for="edit-password" class="form-label" style="display: block; text-align: center;"><strong>Password</strong></label>
                                         <input type="password" class="form-control" style="width: 300px; margin: 0 auto" value="${user.password}" name="password" id="edit-password${user.id}" required>
@@ -71,8 +73,8 @@ fetch(url)
                 </td>
                 `
 
-            // delete form
-            output += `
+                // delete form
+                output += `
             
                 <td>
                     <button type="button" style="color: white" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="${'#Modal_Delete_' + user.id}">
@@ -119,7 +121,9 @@ fetch(url)
                 </td>
             `
 
-            output += `</tr>`
+                output += `</tr>`
+            })
+            tbody.innerHTML = output
         })
-        tbody.innerHTML = output
-    })
+}
+fillTable()
