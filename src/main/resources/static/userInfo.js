@@ -6,7 +6,6 @@ function authUser() {
     fetch(url)
         .then(res => res.json())
         .then(data => {
-            let roles = ''
             output += `
                 <tr>
                     <td>${data.id}</td>

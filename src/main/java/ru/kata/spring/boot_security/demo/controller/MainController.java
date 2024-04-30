@@ -13,7 +13,7 @@ public class MainController {
     }
 
     @GetMapping("/user/{id}")
-    public String userPage(@PathVariable String id) {
+    public String userPage() {
         return "pages/userPage";
     }
 

@@ -6,7 +6,6 @@ function fillHeader() {
     fetch(url)
         .then(res => res.json())
         .then(data => {
-            let roles = ''
             output += `
                 <span style = "color: white">
             `
