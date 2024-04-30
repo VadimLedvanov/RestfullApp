@@ -1,6 +1,8 @@
+
+fillTable()
 function fillTable() {
     const url = "http://localhost:8080/api/users"
-    let tbody = document.getElementById("user-table");
+    let tbody = document.getElementById("users-table");
     let output = ''
 
     // Заполнение таблицы пользователей
@@ -46,7 +48,7 @@ function fillTable() {
                                         <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.id}" name="id" id="edit-id${user.id}" readonly>
                                         <br>
                                         <label for="edit-name" class="form-label" style="display: block; text-align: center;"><strong>Name</strong></label>
-                                        <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.username}" name="name" id="edit-name${user.username}" required>
+                                        <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.username}" name="name" id="edit-name${user.id}" required>
                                         <br>
                                         <label for="edit-age" class="form-label" style="display: block; text-align: center;"><strong>Age</strong></label>
                                         <input type="text" class="form-control" style="width: 300px; margin: 0 auto" value="${user.age}" name="age" id="edit-age${user.id}" required>
@@ -55,14 +57,14 @@ function fillTable() {
                                         <input type="password" class="form-control" style="width: 300px; margin: 0 auto" value="${user.password}" name="password" id="edit-password${user.id}" required>
                                         <br>
                                         <label class="form-label" style="display: block; text-align: center;"><strong>Role</strong></label>
-                                        <select name="selectedRoles" class="form-select" style="width: 300px; margin: 0 auto" aria-label="Default select" size="2">
+                                        <select name="selectedRoles" id="edit-roles${user.id}" class="form-select" style="width: 300px; margin: 0 auto" aria-label="Default select" size="2">
                                             <option value="1">ADMIN</option>
                                             <option value="2">USER</option>
                                         </select>
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value="Edit">
+                                            <input type="submit" class="btn btn-primary" id="buttonEdit" value="Edit">
                                         </div>
 
                                     </form>
@@ -110,7 +112,7 @@ function fillTable() {
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-danger" value="Delete">
+                                            <input type="submit" class="btn btn-danger" id="buttonDelete" value="Delete">
                                         </div>
 
                                     </form>
@@ -126,4 +128,3 @@ function fillTable() {
             tbody.innerHTML = output
         })
 }
-fillTable()

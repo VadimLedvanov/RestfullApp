@@ -8,19 +8,24 @@ function fillHeader() {
         .then(data => {
             let roles = ''
             output += `
-                <span style = "color: white">${data.username}</span>
-                <span style="color: white">with roles: </span>
+                <span style = "color: white">
             `
-            output += `<span style="color: white" class="text-start">`
+
+            output += `
+                <span>${data.username}</span>
+                <span>with roles: </span>
+            `
+            output += `<span>`
             data.roles.forEach(role => {
-                roles += role.name.replace("ROLE_", '') + ' ';
+                output += role.name.replace("ROLE_", '') + ' ';
             })
-            output += roles
+
             output += `</span>`
-            output += `<a style="text-decoration: none; color: gray" href="/logout">Logout</a>`
+            output += `</span>`
+            output += `<a class="btn btn-link" style="text-decoration: none; color: gray" href="/logout">Logout</a>`
             navbar.innerHTML = output
         })
 }
-
 fillHeader()
+
 
