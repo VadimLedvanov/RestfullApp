@@ -1,5 +1,5 @@
 function createUser() {
-    const url = "http://localhost:8080/api/users"
+    const url = "http://localhost:8080/api/admin/users"
     document.getElementById("profile").addEventListener('click', (e) => {
         e.preventDefault()
         let addButtonPressed = e.target.id === 'buttonAdd'

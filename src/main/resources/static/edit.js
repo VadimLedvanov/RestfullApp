@@ -1,7 +1,7 @@
 
 editUser();
 function editUser(){
-    const url = 'http://localhost:8080/api/users'
+    const url = 'http://localhost:8080/api/admin/users'
     let userId;
     document.getElementById('users-table')
         .addEventListener('click', ev => {

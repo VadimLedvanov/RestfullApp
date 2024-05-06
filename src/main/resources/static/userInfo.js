@@ -1,5 +1,5 @@
 function authUser() {
-    const url = "http://localhost:8080/api/authUser"
+    const url = "http://localhost:8080/api/admin/authUser"
     let tbody = document.getElementById("user-tbody")
     let output = ""
 

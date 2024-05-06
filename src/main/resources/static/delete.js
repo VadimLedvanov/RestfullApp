@@ -10,7 +10,7 @@ function deleteUser(){
 
         userId = ev.target.parentElement.parentElement.id.value;
         if (delButtonPressed) {
-            fetch("http://localhost:8080/api/users/" + userId, {
+            fetch("http://localhost:8080/api/admin/users/" + userId, {
                 method: 'DELETE',
             })
                 .then(res => res.json())

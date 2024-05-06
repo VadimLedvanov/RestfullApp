@@ -1,5 +1,5 @@
 function fillHeader() {
-    const url = "http://localhost:8080/api/authUser"
+    const url = "http://localhost:8080/api/admin/authUser"
     let navbar = document.getElementById("navbar-toggle-button")
     let output = `<div class="container-fluid">`
 

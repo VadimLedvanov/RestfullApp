@@ -1,7 +1,7 @@
 
 fillTable()
 function fillTable() {
-    const url = "http://localhost:8080/api/users"
+    const url = "http://localhost:8080/api/admin/users"
     let tbody = document.getElementById("users-table");
     let output = ''
 
