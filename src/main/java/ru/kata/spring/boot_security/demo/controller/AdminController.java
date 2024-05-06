@@ -67,7 +67,7 @@ public class AdminController {
 
     @PutMapping("/users")
     public ResponseEntity<HttpStatus> update(@RequestBody UserDTO userDTO) {
-        adminService.save(convertToUser(userDTO));
+        adminService.update(convertToUser(userDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

@@ -18,6 +18,7 @@ public interface AdminService {
 
     void save(User user);
 
+    void update(User user);
 
 
     User findByUsername(String username);

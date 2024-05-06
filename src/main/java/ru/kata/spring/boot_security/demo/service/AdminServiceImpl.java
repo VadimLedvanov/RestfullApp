@@ -48,6 +48,17 @@ public class AdminServiceImpl implements AdminService{
         userRepository.save(user);
     }
 
+    @Transactional
+    public void update(User user) {
+        if (user.getPassword().equals(findByUsername(user.getUsername()).getPassword())) {
+            userRepository.save(user);
+        } else {
+            user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(user.getPassword()));
+            userRepository.save(user);
+        }
+
+    }
+
     @Transactional(readOnly = true)
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).get();
