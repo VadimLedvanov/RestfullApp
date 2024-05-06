@@ -6,14 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.configs.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
-import ru.kata.spring.boot_security.demo.model.Role;
+
 import ru.kata.spring.boot_security.demo.model.User;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 @Service
 public class AdminServiceImpl implements AdminService{
